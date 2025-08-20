@@ -22,10 +22,13 @@ class EndpointHandler extends AbstractProcessingHandler
     protected function write(LogRecord $record): void
     {
         Http::post($this->url, [
-            'level'    => $record->level->getName(),
+            'severity'    => $record->level->value,
+            'log_type'    => $record->level->getName(),
             'message'  => $record->message,
             'context'  => $record->context,
             'app_name' => $this->appName,
+            'ocurred_at' => $record->datetime,
+            'metadata' => $record->extra
         ]);
     }
 }
