@@ -10,6 +10,13 @@ use ArielBlackymetal\EndpointLogger\Logging\Handler\EndpointHandler;
 
 class EndpointLoggerServiceProvider extends ServiceProvider
 {
+    public function register()
+    {
+        $this->app->singleton('log', function ($app) {
+            return new CustomLogManager($app);
+        });
+    }
+
     public function boot()
     {
         Log::extend('endpoint', function ($app, array $config) {
