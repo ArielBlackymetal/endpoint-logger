@@ -3,30 +3,26 @@
 namespace Arielblackymetal\EndpointLogger;
 
 use Illuminate\Log\LogManager;
+use Arielblackymetal\EndpointLogger\Logging\CustomLogger;
+use Arielblackymetal\EndpointLogger\Logging\Handler\EndpointHandler;
+use Monolog\Processor\WebProcessor;
 
 class CustomLogManager extends LogManager
 {
-    /**
-     * Build an on-demand log channel.
-     *
-     * @param  array  $config
-     * @return \Psr\Log\LoggerInterface
-     */
-    public function build(array $config)
+    protected function build(array $config): \Psr\Log\LoggerInterface
     {
         $channel = $config['channels'][0] ?? $this->getDefaultDriver();
 
-        $handler = new \Arielblackymetal\EndpointLogger\Logging\Handler\EndpointHandler(
+        $handler = new EndpointHandler(
             $config['url'] ?? null,
             config('app.name'),
             $config['level'] ?? 'debug'
         );
 
-        // Agrega el procesador WebProcessor si está disponible
         if ($this->has('request')) {
-            $handler->pushProcessor(new \Monolog\Processor\WebProcessor());
+            $handler->pushProcessor(new WebProcessor());
         }
 
-        return new Logging\CustomLogger($channel, [$handler]);
+        return new CustomLogger($channel, [$handler]);
     }
 }

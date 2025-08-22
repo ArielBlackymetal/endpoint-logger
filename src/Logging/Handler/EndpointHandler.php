@@ -1,10 +1,11 @@
 <?php
 
-namespace ArielBlackymetal\EndpointLogger\Logging\Handler;
+namespace Arielblackymetal\EndpointLogger\Logging\Handler;
 
-use Monolog\LogRecord;
 use Illuminate\Support\Facades\Http;
 use Monolog\Handler\AbstractProcessingHandler;
+use Monolog\LogRecord;
+use Monolog\Logger;
 
 class EndpointHandler extends AbstractProcessingHandler
 {
@@ -13,7 +14,9 @@ class EndpointHandler extends AbstractProcessingHandler
 
     public function __construct(string $url, string $appName, $level = 'debug', bool $bubble = true)
     {
-        parent::__construct($level, $bubble);
+        $monologLevel = Logger::toMonologLevel($level);
+        parent::__construct($monologLevel, $bubble);
+
         $this->url = $url;
         $this->appName = $appName;
     }
@@ -21,13 +24,12 @@ class EndpointHandler extends AbstractProcessingHandler
     protected function write(LogRecord $record): void
     {
         Http::post($this->url, [
-            'severity'    => $record->level->value,
-            'log_type'    => $record->level->getName(),
+            'level'    => $record->level->getName(),
             'message'  => $record->message,
             'context'  => $record->context,
             'app_name' => $this->appName,
-            'ocurred_at' => $record->datetime,
-            'metadata' => $record->extra
+            'extra'    => $record->extra,
+            'log_type' => $record->level->getName(),
         ]);
     }
 }
