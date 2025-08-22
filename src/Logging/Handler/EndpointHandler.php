@@ -2,17 +2,16 @@
 
 namespace ArielBlackymetal\EndpointLogger\Logging\Handler;
 
+use Monolog\LogRecord;
 use Illuminate\Support\Facades\Http;
 use Monolog\Handler\AbstractProcessingHandler;
-use Monolog\Logger;
-use Monolog\LogRecord;
 
 class EndpointHandler extends AbstractProcessingHandler
 {
     private $url;
     private $appName;
 
-    public function __construct(string $url, string $appName, $level = Logger::DEBUG, bool $bubble = true)
+    public function __construct(string $url, string $appName, $level = 'debug', bool $bubble = true)
     {
         parent::__construct($level, $bubble);
         $this->url = $url;
