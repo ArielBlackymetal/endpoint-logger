@@ -23,13 +23,22 @@ class EndpointHandler extends AbstractProcessingHandler
 
     protected function write(LogRecord $record): void
     {
+        // Get the log type, handling custom levels
+        $logType = $record->level->getName();
+
+        // For custom levels, we need to map them to their string representation
+        if ($record->level->value === 250) {
+            $logType = 'INVOICE';
+        }
+
         Http::post($this->url, [
-            'level'    => $record->level->getName(),
+            'severity'    => $record->level->value,
+            'log_type'    => $logType,
             'message'  => $record->message,
             'context'  => $record->context,
             'app_name' => $this->appName,
-            'extra'    => $record->extra,
-            'log_type' => $record->level->getName(),
+            'ocurred_at' => $record->datetime,
+            'metadata'    => $record->extra,
         ]);
     }
 }
