@@ -9,7 +9,7 @@ class CustomLogger extends Logger
     /**
      * Custom log levels for business reporting
      */
-    const INVOICE = 250; // Between INFO (200) and WARNING (300)
+    const INVOICE = 200; // Between INFO (200) and WARNING (300)
 
     /**
      * Initialize custom log levels

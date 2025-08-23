@@ -27,7 +27,7 @@ class EndpointHandler extends AbstractProcessingHandler
         $logType = $record->level->getName();
 
         // For custom levels, we need to map them to their string representation
-        if ($record->level->value === 250) {
+        if ($record->level->value === 200) {
             $logType = 'INVOICE';
         }
 
