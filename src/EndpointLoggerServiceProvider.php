@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Monolog\Processor\WebProcessor;
 use Illuminate\Support\Facades\Log;
 use ArielBlackymetal\EndpointLogger\Logging\Handler\EndpointHandler;
-use Monolog\Logger;
+use ArielBlackymetal\EndpointLogger\Logging\CustomLogger;
 
 class EndpointLoggerServiceProvider extends ServiceProvider
 {
@@ -21,7 +21,7 @@ class EndpointLoggerServiceProvider extends ServiceProvider
 
             $handler->pushProcessor(new WebProcessor());
 
-            return new Logger('custom-log', [$handler]);
+            return new CustomLogger('custom-log', [$handler]);
         });
     }
 }
